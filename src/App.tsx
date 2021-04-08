@@ -33,7 +33,7 @@ function KataForm() {
       alert(
         `El lugar donde se recibira mayor beneficio será: ${ciudadConMejorBeneficio}`
       );
-    }, 3000);
+    }, 1000);
   }
 
   return (

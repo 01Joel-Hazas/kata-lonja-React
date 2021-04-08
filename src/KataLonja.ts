@@ -5,6 +5,8 @@ export function enviarDatosReact(
   pulpoReact: number,
   centolloReact: number
 ) {
+  //  Author: Joel Hazas
+
   let ciudades: ICiudad[] = [
     {
       nombreCiudad: "Madrid",
@@ -120,7 +122,14 @@ export function enviarDatosReact(
       });
     });
 
-    return gananciasCiudad[2].nombreCiudad;
+    gananciasCiudad.sort((a, b) => {
+      if (a.ganancia > b.ganancia) {
+        return -1;
+      }
+      return a.ganancia < b.ganancia ? 1 : 0;
+    });
+
+    return gananciasCiudad[0].nombreCiudad;
   }
 
   let ciudadMejorBeneficio: string = calcularCiudadConMejorBeneficio(

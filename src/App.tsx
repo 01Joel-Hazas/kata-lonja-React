@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import { useState } from "react";
 import { enviarDatosReact } from "./KataLonja";
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -28,8 +28,11 @@ function KataForm() {
       centollo = event.target.elements.centolloInput.value;
       console.log(centollo);
 
-      var result = enviarDatosReact(vieira, pulpo, centollo);
-      alert(`El lugar donde se recibira mayor beneficio será: ${result}`);
+      // Llamada a función global de katalonja.ts
+      var ciudadConMejorBeneficio = enviarDatosReact(vieira, pulpo, centollo);
+      alert(
+        `El lugar donde se recibira mayor beneficio será: ${ciudadConMejorBeneficio}`
+      );
     }, 3000);
   }
 
@@ -43,7 +46,9 @@ function KataForm() {
 
         <div className="row justify-content-center">
           <label htmlFor="vieiraInput">Vieira (KG):</label>
+
           <input
+            className="form-control"
             id="vieiraInput"
             pattern="[0-9]*"
             type="text"
@@ -51,10 +56,14 @@ function KataForm() {
             placeholder="Introduce kg de vieira"
           />
         </div>
-
+        <small id="help" className="form-text text-muted">
+          Introduce un valor númerico.
+        </small>
+        <br />
         <div className="row justify-content-center">
           <label htmlFor="pulpoInput">Pulpo (KG):</label>
           <input
+            className="form-control"
             id="pulpoInput"
             pattern="[0-9]*"
             type="text"
@@ -62,10 +71,14 @@ function KataForm() {
             placeholder="Introduce kg de pulpo"
           />
         </div>
-
+        <small id="help1" className="form-text text-muted">
+          Introduce un valor númerico.
+        </small>
+        <br />
         <div className="row justify-content-center">
           <label htmlFor="centolloInput">Centollo (KG):</label>
           <input
+            className="form-control"
             id="centolloInput"
             pattern="[0-9]*"
             type="text"
@@ -73,6 +86,9 @@ function KataForm() {
             placeholder="Introduce kg de centollo"
           />
         </div>
+        <small id="help2" className="form-text text-muted">
+          Introduce un valor númerico.
+        </small>
         <br />
 
         <div className="col text-center">

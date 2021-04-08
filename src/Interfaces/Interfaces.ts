@@ -1,14 +1,14 @@
-export interface ICiudad{
-    nombreCiudad:string,
-    precioPescados:{
-        vieiras:number, 
-        pulpo:number,
-        centollos:number
-    },
-    kmDistancia: number
+export interface ICiudad {
+  nombreCiudad: string;
+  precioPescados: {
+    vieiras: number;
+    pulpos: number;
+    centollos: number;
+  };
+  kmDistancia: number;
 }
 
-export interface IPescado{
-    nombrePescado:string,
-    cantidad: number
+export interface IPescado {
+  nombrePescado: string;
+  cantidadKg: number;
 }

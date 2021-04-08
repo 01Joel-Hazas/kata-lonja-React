@@ -1,16 +1,16 @@
 import { ICiudad, IPescado } from "./Interfaces/Interfaces";
 
 export function enviarDatosReact(
-  vieira: number,
-  pulpo: number,
-  centollo: number
+  vieiraReact: number,
+  pulpoReact: number,
+  centolloReact: number
 ) {
   let ciudades: ICiudad[] = [
     {
       nombreCiudad: "Madrid",
       precioPescados: {
         vieiras: 500,
-        pulpo: 450,
+        pulpos: 450,
         centollos: 0,
       },
       kmDistancia: 800,
@@ -19,7 +19,7 @@ export function enviarDatosReact(
       nombreCiudad: "Barcelona",
       precioPescados: {
         vieiras: 450,
-        pulpo: 0,
+        pulpos: 0,
         centollos: 120,
       },
       kmDistancia: 1100,
@@ -28,7 +28,7 @@ export function enviarDatosReact(
       nombreCiudad: "Lisboa",
       precioPescados: {
         vieiras: 600,
-        pulpo: 500,
+        pulpos: 500,
         centollos: 100,
       },
       kmDistancia: 600,
@@ -41,16 +41,16 @@ export function enviarDatosReact(
   let pescados: IPescado[] = [
     {
       nombrePescado: "vieiras",
-      cantidad: vieira,
+      cantidadKg: vieiraReact,
     },
 
     {
       nombrePescado: "pulpo",
-      cantidad: pulpo,
+      cantidadKg: pulpoReact,
     },
     {
       nombrePescado: "centollo",
-      cantidad: centollo,
+      cantidadKg: centolloReact,
     },
   ];
 
@@ -63,20 +63,23 @@ export function enviarDatosReact(
 
   function calcularDeprecio(porcentaje: number, distancia: number): number {
     let porcentajeKm: number = distancia / 100;
-    let result: number = porcentajeKm * porcentaje;
-    return result;
+    let deprecio: number = porcentajeKm * porcentaje;
+    return deprecio;
   }
 
   function calcularGananciasProductos(producto: IPescado, ciudad: ICiudad) {
     let deprecio = calcularDeprecio(1, ciudad.kmDistancia);
 
-    let precioProd: number =
+    let precioProducto: number =
       producto.nombrePescado === "vieiras"
         ? ciudad.precioPescados.vieiras
         : producto.nombrePescado === "pulpo"
-        ? ciudad.precioPescados.pulpo
+        ? ciudad.precioPescados.pulpos
         : ciudad.precioPescados.centollos;
-    let precioCiudad = calcularPrecioCiudades(producto.cantidad, precioProd);
+    let precioCiudad = calcularPrecioCiudades(
+      producto.cantidadKg,
+      precioProducto
+    );
     let precioRebajado = (precioCiudad * (100 - deprecio)) / 100;
     return precioRebajado - calcularCosteTransporte(ciudad.kmDistancia);
   }
@@ -120,7 +123,10 @@ export function enviarDatosReact(
     return gananciasCiudad[2].nombreCiudad;
   }
 
-  let resultado: string = calcularCiudadConMejorBeneficio(pescados, ciudades);
-  console.log(resultado);
-  return resultado;
+  let ciudadMejorBeneficio: string = calcularCiudadConMejorBeneficio(
+    pescados,
+    ciudades
+  );
+  console.log(ciudadMejorBeneficio);
+  return ciudadMejorBeneficio;
 }

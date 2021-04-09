@@ -1,19 +1,21 @@
-import { ICiudad, IPescado } from "./Interfaces/Interfaces";
+import { Ciudad, Pescado } from "./Interfaces/Interfaces";
 
-export function enviarDatosReact(
+export function enviarCiudadConMejorBeneficio(
   vieiraReact: number,
   pulpoReact: number,
   centolloReact: number
 ) {
-  //  Author: Joel Hazas
+  const costeInicial: number = 5;
+  const costePorKm: number = 2;
+  const porcentaje: number = 1;
 
-  let ciudades: ICiudad[] = [
+  let ciudades: Ciudad[] = [
     {
       nombreCiudad: "Madrid",
       precioPescados: {
         vieiras: 500,
-        pulpos: 450,
-        centollos: 0,
+        pulpos: 0,
+        centollos: 450,
       },
       kmDistancia: 800,
     },
@@ -21,8 +23,8 @@ export function enviarDatosReact(
       nombreCiudad: "Barcelona",
       precioPescados: {
         vieiras: 450,
-        pulpos: 0,
-        centollos: 120,
+        pulpos: 120,
+        centollos: 0,
       },
       kmDistancia: 1100,
     },
@@ -30,17 +32,14 @@ export function enviarDatosReact(
       nombreCiudad: "Lisboa",
       precioPescados: {
         vieiras: 600,
-        pulpos: 500,
-        centollos: 100,
+        pulpos: 100,
+        centollos: 500,
       },
       kmDistancia: 600,
     },
   ];
 
-  function calcularPrecioCiudades(producto: number, precioProducto: number) {
-    return producto * precioProducto;
-  }
-  let pescados: IPescado[] = [
+  let pescados: Pescado[] = [
     {
       nombrePescado: "vieiras",
       cantidadKg: vieiraReact,
@@ -56,10 +55,10 @@ export function enviarDatosReact(
     },
   ];
 
+  function calcularPrecioCiudades(producto: number, precioProducto: number) {
+    return producto * precioProducto;
+  }
   function calcularCosteTransporte(kmDistancia: number): number {
-    let costeInicial: number = 5;
-    let costePorKm: number = 2;
-
     return costeInicial + kmDistancia * costePorKm;
   }
 
@@ -69,15 +68,20 @@ export function enviarDatosReact(
     return deprecio;
   }
 
-  function calcularGananciasProductos(producto: IPescado, ciudad: ICiudad) {
-    let deprecio = calcularDeprecio(1, ciudad.kmDistancia);
+  function calcularGananciasProductos(producto: Pescado, ciudad: Ciudad) {
+    let deprecio = calcularDeprecio(porcentaje, ciudad.kmDistancia);
+    let precioProducto: number;
 
-    let precioProducto: number =
-      producto.nombrePescado === "vieiras"
-        ? ciudad.precioPescados.vieiras
-        : producto.nombrePescado === "pulpo"
-        ? ciudad.precioPescados.pulpos
-        : ciudad.precioPescados.centollos;
+    if (producto.nombrePescado === "vieiras") {
+      precioProducto = ciudad.precioPescados.vieiras;
+    } else {
+      if (producto.nombrePescado === "pulpo") {
+        precioProducto = ciudad.precioPescados.pulpos;
+      } else {
+        precioProducto = ciudad.precioPescados.centollos;
+      }
+    }
+
     let precioCiudad = calcularPrecioCiudades(
       producto.cantidadKg,
       precioProducto
@@ -86,10 +90,7 @@ export function enviarDatosReact(
     return precioRebajado - calcularCosteTransporte(ciudad.kmDistancia);
   }
 
-  function calcularGananciasPorCiudades(
-    productos: IPescado[],
-    ciudad: ICiudad
-  ) {
+  function calcularGananciasPorCiudades(productos: Pescado[], ciudad: Ciudad) {
     let gananciasVieira: number = calcularGananciasProductos(
       pescados[0],
       ciudad
@@ -103,23 +104,20 @@ export function enviarDatosReact(
       ciudad
     );
 
-    console.log("Los beneficios de vieira son:" + gananciasVieira);
-    console.log("Los beneficios de pulpo son:" + gananciasPulpo);
-    console.log("Los beneficios de centollo son:" + gananciasCentollo);
-
     return gananciasVieira + gananciasPulpo + gananciasCentollo;
   }
 
   function calcularCiudadConMejorBeneficio(
-    productos: IPescado[],
-    ciudades: ICiudad[]
+    productos: Pescado[],
+    ciudades: Ciudad[]
   ) {
     let gananciasCiudad: { ganancia: number; nombreCiudad: string }[] = [];
-    ciudades.forEach((ciudad) => {
-      gananciasCiudad.push({
+
+    gananciasCiudad = ciudades.map((ciudad) => {
+      return {
         ganancia: calcularGananciasPorCiudades(productos, ciudad),
         nombreCiudad: ciudad.nombreCiudad,
-      });
+      };
     });
 
     gananciasCiudad.sort((a, b) => {
@@ -136,6 +134,6 @@ export function enviarDatosReact(
     pescados,
     ciudades
   );
-  console.log(ciudadMejorBeneficio);
+
   return ciudadMejorBeneficio;
 }

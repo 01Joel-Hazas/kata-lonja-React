@@ -1,44 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { enviarCiudadConMejorBeneficio } from "./KataLonja";
 import "bootstrap/dist/css/bootstrap.css";
 
-let vieira: number = 0;
-let pulpo: number = 0;
-let centollo: number = 0;
-
 export function KataForm() {
+  const [cantidadVieiras, setCantidadVieiras] = useState(0);
+  const [cantidadPulpo, setCantidadPulpo] = useState(0);
+  const [cantidadCentollo, setCantidadCentollo] = useState(0);
+  const [isWithValue, setIsValue] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-
   let mensajeCiudadBeneficio: string = "";
 
-  function handleSubmit(event: any) {
-    event.preventDefault();
+  useEffect(() => {
+    if (isWithValue) {
+      setSubmitting(true);
+      setTimeout(() => {
+        setSubmitting(false);
 
-    setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-
-      vieira = event.target.elements.vieiraInput.value;
-
-      pulpo = event.target.elements.pulpoInput.value;
-
-      centollo = event.target.elements.centolloInput.value;
-
-      let ciudadConMejorBeneficio = enviarCiudadConMejorBeneficio(
-        vieira,
-        pulpo,
-        centollo
-      );
-      mensajeCiudadBeneficio = `El lugar donde se recibira mayor beneficio será: ${ciudadConMejorBeneficio}`;
-      // @ts-ignore: Object is possibly 'null'.
-      document.getElementById("mensaje").innerHTML = mensajeCiudadBeneficio;
-    }, 1000);
-  }
-
+        let ciudadConMejorBeneficio = enviarCiudadConMejorBeneficio(
+          cantidadVieiras,
+          cantidadPulpo,
+          cantidadCentollo
+        );
+        mensajeCiudadBeneficio = `El lugar donde se recibira mayor beneficio será: ${ciudadConMejorBeneficio}`;
+        // @ts-ignore: Object is possibly 'null'.
+        document.getElementById("mensaje").innerHTML = mensajeCiudadBeneficio;
+      }, 1000);
+      setIsValue(false);
+    }
+  }, [isWithValue]);
   return (
     <div className="wrapper">
       {submitting && <div>Procesando formulario...</div>}
-      <form className="col-lg-6 offset-lg-3 " onSubmit={handleSubmit}>
+      <form className="col-lg-6 offset-lg-3 ">
         <h1 className="text-center"> KATA-LONJA </h1>
 
         <br />
@@ -52,6 +45,10 @@ export function KataForm() {
             pattern="[0-9]*"
             type="text"
             required
+            onChange={(event) => {
+              setCantidadVieiras(parseFloat(event.target.value));
+              setIsValue(true);
+            }}
             placeholder="Introduce kg de vieira"
           />
         </div>
@@ -67,6 +64,10 @@ export function KataForm() {
             pattern="[0-9]*"
             type="text"
             required
+            onChange={(event) => {
+              setCantidadPulpo(parseFloat(event.target.value));
+              setIsValue(true);
+            }}
             placeholder="Introduce kg de pulpo"
           />
         </div>
@@ -82,6 +83,10 @@ export function KataForm() {
             pattern="[0-9]*"
             type="text"
             required
+            onChange={(event) => {
+              setCantidadCentollo(parseFloat(event.target.value));
+              setIsValue(true);
+            }}
             placeholder="Introduce kg de centollo"
           />
         </div>
@@ -91,11 +96,10 @@ export function KataForm() {
         <br />
 
         <div className="col text-center">
-          <button type="submit" className="btn btn-primary">
-            ENVIAR
-          </button>
           <hr />
-          <p id="mensaje"> </p>
+          <p className="text-success" id="mensaje">
+            {" "}
+          </p>
         </div>
       </form>
     </div>

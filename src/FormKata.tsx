@@ -38,12 +38,11 @@ export function KataForm() {
 
         <div className="row justify-content-center">
           <label htmlFor="vieiraInput">Vieira (KG):</label>
-
           <input
             className="form-control"
             id="vieiraInput"
             pattern="[0-9]*"
-            type="text"
+            type="number"
             required
             onChange={(event) => {
               setCantidadVieiras(parseFloat(event.target.value));
@@ -62,7 +61,7 @@ export function KataForm() {
             className="form-control"
             id="pulpoInput"
             pattern="[0-9]*"
-            type="text"
+            type="number"
             required
             onChange={(event) => {
               setCantidadPulpo(parseFloat(event.target.value));
@@ -81,7 +80,7 @@ export function KataForm() {
             className="form-control"
             id="centolloInput"
             pattern="[0-9]*"
-            type="text"
+            type="number"
             required
             onChange={(event) => {
               setCantidadCentollo(parseFloat(event.target.value));
